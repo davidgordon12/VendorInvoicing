@@ -1,83 +1,91 @@
-﻿@model VendorInvoicing.Entities.Vendor
+﻿@model Vendor
 
 @{
     ViewData["Title"] = "Create";
 }
+
+<style>
+    label {
+        width: 200px;
+        margin-right: 30px;
+    }
+    .form-group {
+        padding-top: 15px;
+    }
+
+    input {
+        height: 45px;
+    }
+</style>
 
 <h1>Create</h1>
 
 <h4>Vendor</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label asp-for="Name" class="control-label fw-bold"></label>
+                <input asp-for="Name" class="form-control w-50" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Address1" class="control-label"></label>
-                <input asp-for="Address1" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label class="control-label fw-bold">Address 1:</label>
+                <input asp-for="Address1" class="form-control w-50" />
                 <span asp-validation-for="Address1" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Address2" class="control-label"></label>
-                <input asp-for="Address2" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label class="control-label fw-bold">Address 2:</label>
+                <input asp-for="Address2" class="form-control w-50" />
                 <span asp-validation-for="Address2" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label asp-for="City" class="control-label fw-bold"></label>
+                <input asp-for="City" class="form-control w-50" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ProvinceOrState" class="control-label"></label>
-                <input asp-for="ProvinceOrState" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label class="control-label fw-bold">Province/State:</label>
+                <input asp-for="ProvinceOrState" class="form-control w-50" />
                 <span asp-validation-for="ProvinceOrState" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ZipOrPostalCode" class="control-label"></label>
-                <input asp-for="ZipOrPostalCode" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label class="control-label fw-bold">Zip/Postal Code:</label>
+                <input asp-for="ZipOrPostalCode" class="form-control w-50" />
                 <span asp-validation-for="ZipOrPostalCode" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="VendorPhone" class="control-label"></label>
-                <input asp-for="VendorPhone" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label class="control-label fw-bold">Phone</label>
+                <input asp-for="VendorPhone" class="form-control w-50" />
                 <span asp-validation-for="VendorPhone" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="VendorContactLastName" class="control-label"></label>
-                <input asp-for="VendorContactLastName" class="form-control" />
-                <span asp-validation-for="VendorContactLastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="VendorContactFirstName" class="control-label"></label>
-                <input asp-for="VendorContactFirstName" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label class="control-label fw-bold">Contact First Name:</label>
+                <input asp-for="VendorContactFirstName" class="form-control w-50" />
                 <span asp-validation-for="VendorContactFirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="VendorContactEmail" class="control-label"></label>
-                <input asp-for="VendorContactEmail" class="form-control" />
+            <div class=" form-group d-flex column">
+                <label class="control-label fw-bold">Contact Last Name:</label>
+                <input asp-for="VendorContactLastName" class="form-control w-50" />
+                <span asp-validation-for="VendorContactLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex column">
+                <label class="control-label fw-bold">Contact Email:</label>
+                <input asp-for="VendorContactEmail" class="form-control w-50" />
                 <span asp-validation-for="VendorContactEmail" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group d-flex column">
+                <button type="submit" value="Create" class="m-2 px-5 btn btn-info text-white fw-bold">Create</button>
+                <a Href="@Url.Action("Index", "Vendors")" value="Cancel" class="m-2 px-5 btn btn-info text-white fw-bold">Cancel</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
