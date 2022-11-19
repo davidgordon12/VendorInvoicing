@@ -1,7 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using VendorInvoicing.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<VendorDataContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Vendors"));
+});
+
 
 var app = builder.Build();
 
@@ -22,6 +31,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Vendors}/{action=Index}/{id?}");
 
 app.Run();
