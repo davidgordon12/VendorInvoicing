@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using VendorInvoicing.Data;
 using VendorInvoicing.Entities;
+using VendorInvoicing.Models;
 
 namespace VendorInvoicing.Services
 {
     public class VendorService
     {
 #pragma warning disable CS8603 // this one is really annoying :p
+#pragma warning disable CS8602 // this one too
         private readonly VendorDataContext _context;
 
         public VendorService(VendorDataContext context)
@@ -24,7 +26,23 @@ namespace VendorInvoicing.Services
         public Vendor GetVendor(int? id)
         {
             return _context.Vendors.Where(v => v.VendorId == id)
-                .Include(v => v.Invoices).FirstOrDefault();
+                .Include(v=>v.Invoices)
+                .FirstOrDefault();
+        }
+
+        public VendorInvoices GetVendorInvoices(int? id, int? invoiceId)
+        {
+            VendorInvoices vendorInvoices = new();
+
+            vendorInvoices.Vendor = _context.Vendors
+                .Where(v => v.VendorId == id)
+                .Include(i=>i.Invoices)
+                .FirstOrDefault();
+
+            vendorInvoices.InvoiceLineItems = _context.InvoiceItems.Where(
+                v => v.InvoiceId == invoiceId).ToList();
+
+            return vendorInvoices;
         }
 
         /// <summary>
