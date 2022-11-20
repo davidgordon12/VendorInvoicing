@@ -10,7 +10,7 @@
         {
             get
             {
-                return InvoiceDueDate?.AddDays(Convert.ToDouble(PaymentTerms?.DueDays));
+                return DateTime.Today.AddDays(20);
             }
         }
 
