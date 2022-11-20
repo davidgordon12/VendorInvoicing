@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VendorInvoicing.Data;
+using VendorInvoicing.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddDbContext<VendorDataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Vendors"));
 });
 
+builder.Services.AddScoped<VendorService>();
 
 var app = builder.Build();
 
