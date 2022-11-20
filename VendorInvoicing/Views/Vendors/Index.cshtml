@@ -9,6 +9,23 @@
     td {
         border-left: 1px solid black;
     }
+
+    .vendor-nav {
+        text-align: center;
+        width: 350px;
+        border: 2px solid black;
+        grid-template-columns: repeat(80px);
+    }
+
+    .vendor-nav-link {
+        grid-row: 1;
+        padding: 15px;
+        border-left: 1px solid black;
+    }
+
+    .vendor-nav-link:active {
+        background-color: lightblue;
+    }
 </style>
 
 <h1>Vendors</h1>
@@ -49,3 +66,9 @@
         }
     </tbody>
 </table>
+<div class="vendor-nav d-grid">
+    <a class="vendor-nav-link" asp-action="Index" asp-route-id="A">A - E</a>
+    <a class="vendor-nav-link" asp-action="Index" asp-route-id="F">F - K</a>
+    <a class="vendor-nav-link" asp-action="Index" asp-route-id="L">L - R</a>
+    <a class="vendor-nav-link" asp-action="Index" asp-route-id="S">S - Z</a>
+</div>
