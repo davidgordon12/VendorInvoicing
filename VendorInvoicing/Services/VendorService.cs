@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using VendorInvoicing.Data;
 using VendorInvoicing.Entities;
@@ -14,11 +15,30 @@ namespace VendorInvoicing.Services
             _context = context;
         }
 
+        /// <summary>
+        /// Gets a Vendor by id
+        /// </summary>
+        /// <param name="id">The wanted Vendor's id</param>
+        /// <returns>A Vendor with the matching id</returns>
+        public Vendor GetVendor(int? id)
+        {
+            return _context.Vendors.Where(v => v.VendorId == id).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets a list of all Vendors in the database
+        /// </summary>
+        /// <returns>A list of type Vendor</returns>
         public List<Vendor> GetVendors()
         {
             return _context.Vendors.ToList();
         }
 
+        /// <summary>
+        /// Returns a list of Vendor's within a specific alphabetical range
+        /// </summary>
+        /// <param name="id">The id of the range query</param>
+        /// <returns>A sorted list of type Vendor</returns>
         public List<Vendor> GetVendorsByRange(char? id)
         {
             var vendors = _context.Vendors.ToList();
@@ -94,6 +114,57 @@ namespace VendorInvoicing.Services
             }
 
             return sortedVendors;
+        }
+
+        /// <summary>
+        /// Creates a Vendor in the database
+        /// </summary>
+        /// <param name="vendor">The Vendor to create</param>
+        /// <returns>True if successful</returns>
+        public bool AddVendor(Vendor vendor)
+        {
+            try
+            {
+                _context.Add(vendor);
+                _context.SaveChanges();
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Updates the Vendor in the database
+        /// </summary>
+        /// <param name="vendor">The Vendor to update</param>
+        /// <returns>True if successful</returns>
+        public bool UpdateVendorInformation(Vendor vendor)
+        {
+            try
+            {
+                _context.Update(vendor);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception) { return false; }
+        }
+
+        /// <summary>
+        /// Removes the Vendor from the database
+        /// </summary>
+        /// <param name="vendor">The vendor to remove</param>
+        /// <returns>True if successful</returns>
+        public bool RemoveVendor(int? id)
+        {
+            try
+            {
+                _context.Remove(_context.Vendors.Where(v=>v.VendorId == id).FirstOrDefault());
+                _context.SaveChanges();
+                return true;
+            }
+            catch(Exception) { return false; }
         }
     }
 }
