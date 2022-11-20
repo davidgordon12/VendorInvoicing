@@ -8,6 +8,7 @@ namespace VendorInvoicing.Services
 {
     public class VendorService
     {
+#pragma warning disable CS8603 // this one is really annoying :p
         private readonly VendorDataContext _context;
 
         public VendorService(VendorDataContext context)
@@ -22,7 +23,8 @@ namespace VendorInvoicing.Services
         /// <returns>A Vendor with the matching id</returns>
         public Vendor GetVendor(int? id)
         {
-            return _context.Vendors.Where(v => v.VendorId == id).FirstOrDefault();
+            return _context.Vendors.Where(v => v.VendorId == id)
+                .Include(v => v.Invoices).FirstOrDefault();
         }
 
         /// <summary>
