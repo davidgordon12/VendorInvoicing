@@ -30,11 +30,11 @@ namespace VendorInvoicing.Services
             {
                 foreach (Vendor vendor in vendors)
                 {
-                    if (!vendor.Name.StartsWith('A') ||
-                        !vendor.Name.StartsWith('B') ||
-                        !vendor.Name.StartsWith('C') ||
-                        !vendor.Name.StartsWith('D') ||
-                        !vendor.Name.StartsWith('E'))
+                    if (vendor.Name.StartsWith('A') ||
+                        vendor.Name.StartsWith('B') ||
+                        vendor.Name.StartsWith('C') ||
+                        vendor.Name.StartsWith('D') ||
+                        vendor.Name.StartsWith('E'))
                     {
                         sortedVendors.Add(vendor);
                     }
@@ -45,12 +45,12 @@ namespace VendorInvoicing.Services
             {
                 foreach (Vendor vendor in vendors)
                 {
-                    if (!vendor.Name.StartsWith('F') ||
-                        !vendor.Name.StartsWith('G') ||
-                        !vendor.Name.StartsWith('H') ||
-                        !vendor.Name.StartsWith('I') ||
-                        !vendor.Name.StartsWith('J') ||
-                        !vendor.Name.StartsWith('K'))
+                    if (vendor.Name.StartsWith('F') ||
+                        vendor.Name.StartsWith('G') ||
+                        vendor.Name.StartsWith('H') ||
+                        vendor.Name.StartsWith('I') ||
+                        vendor.Name.StartsWith('J') ||
+                        vendor.Name.StartsWith('K'))
                     {
                         sortedVendors.Add(vendor);
                     }
@@ -61,13 +61,13 @@ namespace VendorInvoicing.Services
             {
                 foreach (Vendor vendor in vendors)
                 {
-                    if (!vendor.Name.StartsWith('L') ||
-                        !vendor.Name.StartsWith('M') ||
-                        !vendor.Name.StartsWith('N') ||
-                        !vendor.Name.StartsWith('O') ||
-                        !vendor.Name.StartsWith('P') ||
-                        !vendor.Name.StartsWith('Q') ||
-                        !vendor.Name.StartsWith('R'))
+                    if (vendor.Name.StartsWith('L') ||
+                        vendor.Name.StartsWith('M') ||
+                        vendor.Name.StartsWith('N') ||
+                        vendor.Name.StartsWith('O') ||
+                        vendor.Name.StartsWith('P') ||
+                        vendor.Name.StartsWith('Q') ||
+                        vendor.Name.StartsWith('R'))
                     {
                         sortedVendors.Add(vendor);
                     }
@@ -78,14 +78,14 @@ namespace VendorInvoicing.Services
             {
                 foreach (Vendor vendor in vendors)
                 {
-                    if (!vendor.Name.StartsWith('S') ||
-                        !vendor.Name.StartsWith('T') ||
-                        !vendor.Name.StartsWith('U') ||
-                        !vendor.Name.StartsWith('V') ||
-                        !vendor.Name.StartsWith('W') ||
-                        !vendor.Name.StartsWith('X') ||
-                        !vendor.Name.StartsWith('Y') ||
-                        !vendor.Name.StartsWith('Z'))
+                    if (vendor.Name.StartsWith('S') ||
+                        vendor.Name.StartsWith('T') ||
+                        vendor.Name.StartsWith('U') ||
+                        vendor.Name.StartsWith('V') ||
+                        vendor.Name.StartsWith('W') ||
+                        vendor.Name.StartsWith('X') ||
+                        vendor.Name.StartsWith('Y') ||
+                        vendor.Name.StartsWith('Z'))
                     {
                         sortedVendors.Add(vendor);
 
