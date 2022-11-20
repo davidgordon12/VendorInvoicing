@@ -1,84 +1,95 @@
-﻿@model VendorInvoicing.Entities.Vendor
+﻿@model VendorInvoices
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Invoices";
 }
 
-<h1>Details</h1>
+<style>
+    th,
+    td {
+        border-left: 1px solid black;
+    }
 
-<div>
-    <h4>Vendor</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address1)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address1)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address2)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address2)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProvinceOrState)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProvinceOrState)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ZipOrPostalCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ZipOrPostalCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VendorPhone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VendorPhone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VendorContactLastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VendorContactLastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VendorContactFirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VendorContactFirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.VendorContactEmail)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.VendorContactEmail)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-    </dl>
+    #left {
+        float: left;
+    }
+
+    #right {
+        float: right;
+    }
+</style>
+
+<div class="col">
+    <div id="left" class="m-3">
+        <h4>Invoices for @Model.Vendor.Name</h4>
+        <br />
+        <p class="text-muted">Address: PO Box @Model.Vendor.Address1</p>
+        <hr />
+        <table class="table table-striped border-3 border border-dark">
+            <thead>
+                <tr>
+                    <th>
+                        Invoice #
+                    </th>
+                    <th>
+                        Due Date
+                    </th>
+                    <th>
+                        Amount Paid
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var invoice in Model.Vendor.Invoices)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Invoices" asp-route-invoiceId="@invoice.InvoiceId">@Html.DisplayFor(modelItem => invoice.InvoiceId)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => invoice.InvoiceDueDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => invoice.PaymentTotal)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="right" class="m-3">
+        <a asp-action="Index" asp-controller="Vendors">Return to Vendors</a>
+        <br />
+        <br />
+        <p class="text-muted">Terms: 30 Days</p>
+        <hr />
+        <table class="table table-striped border-3 border border-dark w-50">
+            <thead>
+                <tr>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var lineItem in Model.InvoiceLineItems)
+                {
+                    <tr>
+                        <td>
+                            @lineItem.Description
+                        </td>
+                        <td>
+                            @lineItem.Amount
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.VendorId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+
