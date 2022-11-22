@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using VendorInvoicing.Data;
 using VendorInvoicing.Entities;
 using VendorInvoicing.Models;
@@ -23,6 +18,8 @@ namespace VendorInvoicing.Controllers
 
         public IActionResult Index(char? id)
         {
+            ViewBag.Deleted = DeletedService.GetLastDeleted();
+
             if (id is null)
                 return View(_vendorService.GetVendors());
 
@@ -32,8 +29,9 @@ namespace VendorInvoicing.Controllers
         public IActionResult Invoices(int? id, int? invoiceId)
         {
             if (id is null)
-                return View("Index", _vendorService.GetVendors());
+                return RedirectToAction("Index");
 
+            // initial page load
             if (invoiceId is null)
                 return View(new VendorInvoices
                 {
@@ -41,10 +39,10 @@ namespace VendorInvoicing.Controllers
                     InvoiceLineItems = Enumerable.Empty<InvoiceLineItem>().ToList(),
                 });
                 
+            // if an invoice was passed, it will show all the invoices
+            // along with it's InvoiceLineItems 
             VendorInvoices vendorInvoices = _vendorService.GetVendorInvoices(id, invoiceId);
             return View(vendorInvoices);
-
-            
         }
 
         public IActionResult Create()
@@ -67,9 +65,7 @@ namespace VendorInvoicing.Controllers
         public IActionResult Edit(int? id)
         {
             if (id == null)
-            {
-                return NotFound();
-            }
+                return RedirectToAction();
 
             Vendor vendor = _vendorService.GetVendor(id);
             return View(vendor);
@@ -90,11 +86,16 @@ namespace VendorInvoicing.Controllers
         public IActionResult Delete(int? id)
         {
             if (id == null)
-                return View("Index");
+                return RedirectToAction("Index");
 
             _vendorService.RemoveVendor(id);
-            return View();
+            return RedirectToAction("Index");
         }
 
+        public IActionResult Undo(int id)
+        {
+            _vendorService.ReinstateVendor(id);
+            return RedirectToAction("Index");
+        }
     }
 }
