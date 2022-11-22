@@ -1,6 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Text.RegularExpressions;
 using VendorInvoicing.Data;
 using VendorInvoicing.Entities;
 using VendorInvoicing.Models;
@@ -12,6 +14,7 @@ namespace VendorInvoicing.Services
 #pragma warning disable CS8603 // this one is really annoying :p
 #pragma warning disable CS8602 // this one too
         private readonly VendorDataContext _context;
+        private Dictionary<string, int> deleted = new Dictionary<string, int>();
 
         public VendorService(VendorDataContext context)
         {
@@ -26,17 +29,23 @@ namespace VendorInvoicing.Services
         public Vendor GetVendor(int? id)
         {
             return _context.Vendors.Where(v => v.VendorId == id)
-                .Include(v=>v.Invoices)
+                .Include(v => v.Invoices)
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Creates a VendorInvoices ViewModel 
+        /// </summary>
+        /// <param name="id">The Vendor id</param>
+        /// <param name="invoiceId">The Invoice id to load the InvoiceLineItems for</param>
+        /// <returns></returns>
         public VendorInvoices GetVendorInvoices(int? id, int? invoiceId)
         {
             VendorInvoices vendorInvoices = new();
 
             vendorInvoices.Vendor = _context.Vendors
                 .Where(v => v.VendorId == id)
-                .Include(i=>i.Invoices)
+                .Include(i => i.Invoices)
                 .FirstOrDefault();
 
             vendorInvoices.InvoiceLineItems = _context.InvoiceItems.Where(
@@ -62,78 +71,36 @@ namespace VendorInvoicing.Services
         public List<Vendor> GetVendorsByRange(char? id)
         {
             var vendors = _context.Vendors.ToList();
-            var sortedVendors = new List<Vendor>();
-
-            // I'm sorry you had to see this
 
             if (id == 'A')
             {
-                foreach (Vendor vendor in vendors)
-                {
-                    if (vendor.Name.StartsWith('A') ||
-                        vendor.Name.StartsWith('B') ||
-                        vendor.Name.StartsWith('C') ||
-                        vendor.Name.StartsWith('D') ||
-                        vendor.Name.StartsWith('E'))
-                    {
-                        sortedVendors.Add(vendor);
-                    }
-                }
+                var range = new Regex("^[A-E]", RegexOptions.IgnoreCase);
+                List<Vendor> sortedVendors = vendors.Where(v => range.IsMatch(v.Name)).ToList();
+                return sortedVendors;
             }
 
             if (id == 'F')
             {
-                foreach (Vendor vendor in vendors)
-                {
-                    if (vendor.Name.StartsWith('F') ||
-                        vendor.Name.StartsWith('G') ||
-                        vendor.Name.StartsWith('H') ||
-                        vendor.Name.StartsWith('I') ||
-                        vendor.Name.StartsWith('J') ||
-                        vendor.Name.StartsWith('K'))
-                    {
-                        sortedVendors.Add(vendor);
-                    }
-                }
+                var range = new Regex("^[F-K]", RegexOptions.IgnoreCase);
+                List<Vendor> sortedVendors = vendors.Where(v => range.IsMatch(v.Name)).ToList();
+                return sortedVendors;
             }
 
             if (id == 'L')
             {
-                foreach (Vendor vendor in vendors)
-                {
-                    if (vendor.Name.StartsWith('L') ||
-                        vendor.Name.StartsWith('M') ||
-                        vendor.Name.StartsWith('N') ||
-                        vendor.Name.StartsWith('O') ||
-                        vendor.Name.StartsWith('P') ||
-                        vendor.Name.StartsWith('Q') ||
-                        vendor.Name.StartsWith('R'))
-                    {
-                        sortedVendors.Add(vendor);
-                    }
-                }
+                var range = new Regex("^[L-R]", RegexOptions.IgnoreCase);
+                List<Vendor> sortedVendors = vendors.Where(v => range.IsMatch(v.Name)).ToList();
+                return sortedVendors;
             }
 
             if (id == 'S')
             {
-                foreach (Vendor vendor in vendors)
-                {
-                    if (vendor.Name.StartsWith('S') ||
-                        vendor.Name.StartsWith('T') ||
-                        vendor.Name.StartsWith('U') ||
-                        vendor.Name.StartsWith('V') ||
-                        vendor.Name.StartsWith('W') ||
-                        vendor.Name.StartsWith('X') ||
-                        vendor.Name.StartsWith('Y') ||
-                        vendor.Name.StartsWith('Z'))
-                    {
-                        sortedVendors.Add(vendor);
-
-                    }
-                }
+                var range = new Regex("^[S-Z]", RegexOptions.IgnoreCase);
+                List<Vendor> sortedVendors = vendors.Where(v => range.IsMatch(v.Name)).ToList();
+                return sortedVendors;
             }
 
-            return sortedVendors;
+            return vendors;
         }
 
         /// <summary>
@@ -149,7 +116,7 @@ namespace VendorInvoicing.Services
                 _context.SaveChanges();
                 return true;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -172,7 +139,7 @@ namespace VendorInvoicing.Services
         }
 
         /// <summary>
-        /// Removes the Vendor from the database
+        /// Soft deletes the Vendor by filtering them out from any queries
         /// </summary>
         /// <param name="vendor">The vendor to remove</param>
         /// <returns>True if successful</returns>
@@ -180,11 +147,46 @@ namespace VendorInvoicing.Services
         {
             try
             {
-                _context.Remove(_context.Vendors.Where(v=>v.VendorId == id).FirstOrDefault());
+                var vendor = _context.Vendors.Where(v => v.VendorId == id).FirstOrDefault();
+                vendor.IsDeleted = true;
+                _context.Vendors.Update(vendor);
+                _context.SaveChanges();
+
+                DeletedService.AddLastDeleted(vendor.VendorId);
+
+                return true;
+            }
+            catch (Exception) { return false; }
+        }
+
+        /// <summary>
+        /// Adds the Vendor back to the list of queryable Vendors
+        /// </summary>
+        /// <param name="id">The vendor to add</param>
+        /// <returns>True if successful</returns>
+        public bool ReinstateVendor(int id)
+        {
+            try
+            {
+                var vendor = _context.Vendors.Where(v => v.VendorId == id).IgnoreQueryFilters().FirstOrDefault();
+                vendor.IsDeleted = false;
+                _context.Vendors.Update(vendor);
                 _context.SaveChanges();
                 return true;
             }
-            catch(Exception) { return false; }
+            catch (Exception) { return false; }
+        }
+
+        /// <summary>
+        /// Gets the id of the last deleted vendor
+        /// </summary>
+        /// <returns>The id of the last deleted vendor, if not null</returns>
+        public int GetLastDeletedVendor()
+        {
+            if (deleted.ContainsKey("lastDeleted"))
+                return deleted["lastDeleted"];
+            else
+                return 0;
         }
     }
 }
