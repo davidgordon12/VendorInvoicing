@@ -5,7 +5,7 @@
 }
 
 <style>
-    th, 
+    th,
     td {
         border-left: 1px solid black;
     }
@@ -23,8 +23,19 @@
         border-left: 1px solid black;
     }
 
-    .vendor-nav-link:active {
-        background-color: lightblue;
+        .vendor-nav-link:active {
+            background-color: lightblue;
+        }
+
+    .close {
+        border: none;
+        background: none;
+        color: #2b2b2b;
+        font-size: 28px;
+        float: right;
+        margin-right: 30px;
+        margin-top: -8px;
+        opacity: 0.7;
     }
 </style>
 
@@ -33,6 +44,16 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+@if(ViewBag.Deleted > 0)
+{
+    <div id="alert" class="alert alert-warning alert-dismissible fade show flex-column" role="alert">
+        <strong>Vendor</strong> has been deleted. Click <a asp-action="Undo" asp-route-id=@ViewBag.Deleted class="alert-link">here</a> to undo.
+        <button id="alert-close-btn" type="button" class="close bg-opacity-10" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 <table class="table table-striped border-3 border border-dark">
     <thead>
         <tr>
