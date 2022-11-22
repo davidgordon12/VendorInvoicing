@@ -15,6 +15,9 @@ namespace VendorInvoicing.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Vendor>().HasQueryFilter(
+                v => !v.IsDeleted);
+
             modelBuilder.Entity<Vendor>().HasData(
                 new Vendor()
                 {
