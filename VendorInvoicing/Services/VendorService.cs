@@ -16,10 +16,7 @@ namespace VendorInvoicing.Services
         private readonly VendorDataContext _context;
         private Dictionary<string, int> deleted = new Dictionary<string, int>();
 
-        public VendorService(VendorDataContext context)
-        {
-            _context = context;
-        }
+        public VendorService(VendorDataContext context) => _context = context;
 
         /// <summary>
         /// Gets a Vendor by id
@@ -189,4 +186,6 @@ namespace VendorInvoicing.Services
                 return 0;
         }
     }
+#pragma warning restore CS8603 // this one is really annoying :p
+#pragma warning restore CS8602 // this one too
 }
