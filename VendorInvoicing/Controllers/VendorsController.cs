@@ -11,10 +11,8 @@ namespace VendorInvoicing.Controllers
     {
         private readonly VendorService _vendorService;
 
-        public VendorsController(VendorDataContext context, VendorService vendorService)
-        {
+        public VendorsController(VendorService vendorService) => 
             _vendorService = vendorService;
-        }
 
         public IActionResult Index(char? id)
         {
