@@ -21,7 +21,8 @@
 
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Create">
+        <form method="post" asp-action="Edit">
+            <input class="visually-hidden" asp-for="VendorId" value="@Model.VendorId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class=" form-group d-flex column">
                 <label asp-for="Name" class="control-label fw-bold"></label>
@@ -74,7 +75,7 @@
                 <span asp-validation-for="VendorContactEmail" class="text-danger"></span>
             </div>
             <div class="form-group d-flex column">
-                <button type="submit" value="Create" class="m-2 px-5 btn btn-info text-white fw-bold">Create</button>
+                <button type="submit" value="Edit" class="m-2 px-5 btn btn-info text-white fw-bold">Update</button>
                 <a Href="@Url.Action("Index", "Vendors")" value="Cancel" class="m-2 px-5 btn btn-info text-white fw-bold">Cancel</a>
             </div>
         </form>

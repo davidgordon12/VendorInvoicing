@@ -128,7 +128,7 @@ namespace VendorInvoicing.Services
         {
             try
             {
-                _context.Update(vendor);
+                _context.Vendors.Update(vendor);
                 _context.SaveChanges();
                 return true;
             }
