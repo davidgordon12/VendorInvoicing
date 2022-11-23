@@ -186,6 +186,6 @@ namespace VendorInvoicing.Services
                 return 0;
         }
     }
-#pragma warning restore CS8603 // this one is really annoying :p
-#pragma warning restore CS8602 // this one too
+#pragma warning restore CS8603 
+#pragma warning restore CS8602 
 }
